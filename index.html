@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sea Of Me · 赛博自己</title>
+    <meta name="description" content="存放我的想法、经验和天马行空的内在海域。" />
     <style>
         /* ===== 全局重置 ===== */
         * {
@@ -19,12 +20,10 @@
             justify-content: center;
             align-items: center;
             padding: 24px;
-            /* 深蓝渐变背景 */
             background: linear-gradient(145deg, #091a2e 0%, #132f4a 35%, #1a4a6e 70%, #0f2a40 100%);
             background-attachment: fixed;
         }
 
-        /* ===== 毛玻璃卡片容器 ===== */
         .container {
             max-width: 780px;
             width: 100%;
@@ -41,7 +40,6 @@
             transition: all 0.3s ease;
         }
 
-        /* 粉色点缀光晕 */
         .container::before {
             content: "";
             position: absolute;
@@ -68,13 +66,12 @@
             z-index: 0;
         }
 
-        /* 所有内容在光晕上层 */
         .container>* {
             position: relative;
             z-index: 1;
         }
 
-        /* ===== 1. 主标题 ===== */
+        /* ===== 头部（不变） ===== */
         .main-title {
             font-size: 72px;
             font-weight: 700;
@@ -85,7 +82,6 @@
             line-height: 1.1;
         }
 
-        /* 主标题英文装饰线 */
         .title-ornament {
             font-size: 13px;
             letter-spacing: 6px;
@@ -96,7 +92,6 @@
             font-family: "Georgia", serif;
         }
 
-        /* ===== 2. 副标题（闪烁深蓝动画） ===== */
         .subtitle {
             font-size: 24px;
             font-weight: 300;
@@ -123,7 +118,6 @@
             }
         }
 
-        /* ===== 3. 自我介绍（版本C·温柔邀请） ===== */
         .description {
             font-size: 18px;
             line-height: 2.1;
@@ -131,7 +125,7 @@
             font-weight: 300;
             text-align: left;
             padding: 0 4px;
-            margin-bottom: 34px;
+            margin-bottom: 24px;
             letter-spacing: 0.5px;
         }
 
@@ -141,92 +135,176 @@
             font-style: italic;
         }
 
-        .description .drop-cap {
+        .drop-cap {
             font-size: 28px;
             font-weight: 400;
             color: #e8c4d0;
         }
 
-        /* ===== 分割线 ===== */
-        .divider {
-            width: 56px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 180, 200, 0.35), transparent);
-            margin: 0 auto 34px auto;
-            border-radius: 4px;
+        /* ===== 导航气泡 ===== */
+        .nav-bubbles {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
         }
 
-        /* ===== 4. 赛博回信模块（三层融合） ===== */
-        .cyber-section {
+        .bubble {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #b5d4ed;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(8px);
+            position: relative;
+            user-select: none;
+        }
+
+        .bubble:hover {
+            background: rgba(255, 180, 200, 0.15);
+            border-color: rgba(255, 180, 200, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);
+        }
+
+        .bubble.active {
+            background: rgba(255, 150, 180, 0.25);
+            border-color: rgba(255, 150, 180, 0.55);
+            color: #fce4ec;
+            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .bubble::after {
+            content: attr(data-tip);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(180, 210, 235, 0.6);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .bubble:hover::after {
+            opacity: 1;
+        }
+
+        /* ===== 板块内容容器 ===== */
+        .room-container {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 40px;
-            padding: 30px 24px 24px;
+            padding: 36px 28px 30px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            min-height: 220px;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #c8ddec;
         }
 
-        .cyber-section:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 180, 200, 0.15);
-        }
-
-        /* 主标题 */
-        .cyber-main {
-            font-size: 20px;
-            font-weight: 400;
-            letter-spacing: 5px;
+        .room-title {
+            font-size: 22px;
+            letter-spacing: 4px;
             color: #b5d4ed;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding-bottom: 12px;
         }
 
-        /* 引语（来自深海） */
-        .cyber-quote {
+        .room-content {
             font-size: 16px;
-            color: #8bb8d9;
-            letter-spacing: 2px;
-            font-style: italic;
+            line-height: 2;
+            color: #bdd6e8;
+            font-weight: 300;
+        }
+
+        .bottle-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 2px solid rgba(255, 150, 180, 0.35);
+            padding: 12px 16px;
             margin-bottom: 12px;
-            opacity: 0.85;
-        }
-
-        /* 底部回声小字 */
-        .cyber-echo {
-            font-size: 13px;
-            color: rgba(180, 210, 235, 0.40);
-            letter-spacing: 3px;
+            border-radius: 0 12px 12px 0;
             font-style: italic;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 14px;
-            margin-top: 4px;
         }
 
-        /* 粉色点缀小点 */
-        .cyber-echo::before {
-            content: "·";
-            color: rgba(255, 150, 180, 0.5);
-            margin-right: 8px;
+        .log-entry {
+            margin-bottom: 20px;
+        }
+        .log-entry h4 {
+            font-weight: 400;
+            color: #f0c8d5;
+            margin-bottom: 6px;
+            font-size: 18px;
+        }
+        .log-entry p {
+            color: #bdd6e8;
         }
 
-        .cyber-echo::after {
-            content: "·";
-            color: rgba(255, 150, 180, 0.5);
-            margin-left: 8px;
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #d5e5f2;
         }
 
-        /* ===== 粉色点缀元素 ===== */
-        .pink-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 150, 180, 0.30);
-            margin: 0 6px;
-            vertical-align: middle;
+        .dream-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            border: 1px dashed rgba(255, 200, 220, 0.2);
         }
 
-        /* ===== 5. 底部海浪装饰区 ===== */
+        .about-text p {
+            margin-bottom: 14px;
+        }
+
+        /* ===== 访客计数器样式 ===== */
+        .visitor-counter {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: rgba(180, 210, 235, 0.5);
+            margin-bottom: 16px;
+            font-style: italic;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .visitor-counter .icon {
+            font-size: 16px;
+        }
+
+        .visitor-counter #busuanzi_value_site_uv {
+            color: #f5b8c9;
+            font-weight: 400;
+        }
+
+        /* ===== 底部波浪不变 ===== */
         .wave-footer {
-            margin-top: 36px;
+            margin-top: 0;
             padding-top: 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             font-size: 28px;
@@ -241,29 +319,15 @@
             display: inline-block;
             animation: waveFloat 3s ease-in-out infinite;
         }
-
-        .wave-footer span:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-        .wave-footer span:nth-child(3) {
-            animation-delay: 0.8s;
-        }
-        .wave-footer span:nth-child(4) {
-            animation-delay: 1.2s;
-        }
-        .wave-footer span:nth-child(5) {
-            animation-delay: 1.6s;
-        }
-        .wave-footer span:nth-child(6) {
-            animation-delay: 2.0s;
-        }
-        .wave-footer span:nth-child(7) {
-            animation-delay: 2.4s;
-        }
+        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }
+        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }
+        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }
+        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }
+        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }
+        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }
 
         @keyframes waveFloat {
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0px);
                 opacity: 0.3;
             }
@@ -273,83 +337,34 @@
             }
         }
 
-        /* ===== 6. 手机响应式适配 ===== */
+        /* ===== 响应式 ===== */
         @media (max-width: 600px) {
             .container {
                 padding: 32px 18px 30px;
                 border-radius: 40px;
             }
-
             .main-title {
                 font-size: 40px;
                 letter-spacing: 5px;
             }
-
-            .title-ornament {
-                font-size: 11px;
-                letter-spacing: 4px;
-            }
-
             .subtitle {
                 font-size: 18px;
                 letter-spacing: 4px;
-                margin-bottom: 24px;
-                padding-bottom: 20px;
             }
-
             .description {
                 font-size: 16px;
                 line-height: 2;
-                padding: 0 2px;
             }
-
-            .cyber-section {
-                padding: 22px 16px 18px;
+            .bubble {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
             }
-
-            .cyber-main {
-                font-size: 17px;
-                letter-spacing: 3px;
+            .room-container {
+                padding: 24px 16px;
             }
-
-            .cyber-quote {
-                font-size: 14px;
-            }
-
-            .cyber-echo {
-                font-size: 12px;
-            }
-
-            .wave-footer {
-                font-size: 20px;                字体大小: 20px;
-                letter-spacing: 8px;
-                margin-top: 28px;                上外边距: 28px;
-                padding-top: 18px;                上内边距: 18px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .container {
-                padding: 24px 14px 24px;
-                border-radius: 32px;
-            }
-
-            .main-title {
-                font-size: 32px;
-                letter-spacing: 3px;
-            }
-
-            .subtitle {
-                font-size: 15px;
-                letter-spacing: 3px;
-            }
-
-            .description {
-                font-size: 14px;
-            }
-
-            .cyber-main {
-                font-size: 15px;
+            .room-title {
+                font-size: 19px;
             }
         }
     </style>
@@ -358,44 +373,115 @@
 
     <div class="container">
 
-        <!-- ===== 1. 主标题 ===== -->
+        <!-- 头部（不变） -->
         <h1 class="main-title">Sea Of Me</h1>
         <div class="title-ornament">✦ a quiet ocean within ✦</div>
-
-        <!-- ===== 2. 副标题（闪烁深蓝） ===== -->
         <div class="subtitle">我的内心海洋</div>
-
-        <!-- ===== 3. 自我介绍（版本C·温柔邀请） ===== -->
         <div class="description">
-            <span class="drop-cap">欢</span>迎来到我的内在海域。
-            这里没有对错，只有存在。<br />
+            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />
             我把自己的思绪、情绪和安静的瞬间，
             <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />
             如果你捡到了什么，那是海想让你看到的。
         </div>
 
-        <!-- ===== 分割线 ===== -->
-        <div class="divider"></div>
-
-        <!-- ===== 4. 赛博回信模块（三层融合） ===== -->
-        <div class="cyber-section">
-            <div class="cyber-main">🌊 赛博回信</div>
-            <div class="cyber-quote">🐚 来自深海的第1封信 · 即将浮出水面</div>
-            <div class="cyber-echo">🌀 你听到的声音，是海在回应你</div>
+        <!-- 五个气泡导航 -->
+        <div class="nav-bubbles">
+            <div class="bubble active" data-room="bottle" data-tip="漂流瓶">🌊</div>
+            <div class="bubble" data-room="log" data-tip="日志">📜</div>
+            <div class="bubble" data-room="skill" data-tip="技能">⚓</div>
+            <div class="bubble" data-room="dream" data-tip="天马">✨</div>
+            <div class="bubble" data-room="about" data-tip="关于">🐚</div>
         </div>
 
-        <!-- ===== 5. 底部海浪装饰 ===== -->
+        <!-- 板块内容区 -->
+        <div class="room-container" id="room-bottle">
+            <div class="room-title">🌊 漂流瓶海</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的漂流瓶内容 ===== -->
+                <div class="bottle-item">我昨晚梦见自己是一行代码。</div>
+                <div class="bottle-item">学会拒绝的那天，下着雨。</div>
+                <!-- 继续添加更多瓶子 -->
+            </div>
+        </div>
+
+        <div class="room-container" id="room-log" style="display:none;">
+            <div class="room-title">📜 日志暗礁</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的日志 ===== -->
+                <div class="log-entry">
+                    <h4>日志标题示例</h4>
+                    <p>在这里写你的经历或思考……</p >
+                </div>
+            </div>
+        </div>
+
+        <div class="room-container" id="room-skill" style="display:none;">
+            <div class="room-title">⚓ 技能与印记</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的技能标签 ===== -->
+                <div class="skill-tags">
+                    <span class="skill-tag">能在三秒内辨认云的类型</span>
+                    <span class="skill-tag">会做一种很酸的柠檬挞</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="room-container" id="room-dream" style="display:none;">
+            <div class="room-title">✨ 天马行空画廊</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的天马行空 ===== -->
+                <div class="dream-card">
+                    平行宇宙里我是一个面包师，每天闻着黄油醒来。
+                </div>
+            </div>
+        </div>
+
+        <div class="room-container" id="room-about" style="display:none;">
+            <div class="room-title">🐚 关于我这片海</div>
+            <div class="room-content about-text">
+                <!-- ===== 在这里写自我介绍或价值观 ===== -->
+                <p>我是这片海域的主人，一个喜欢收集思绪的人。</p >
+                <p>我相信每个念头都值得被温柔存放。</p >
+            </div>
+        </div>
+
+        <!-- ===== 访客计数器 ===== -->
+        <div class="visitor-counter">
+            <span class="icon">🫧</span>
+            <span>已有</span>
+            <span id="busuanzi_value_site_uv">…</span>
+            <span>位访客漂流至此</span>
+        </div>
+
+        <!-- 底部波浪 -->
         <div class="wave-footer">
-            <span>~</span>
-            <span>~</span>
-            <span>~</span>
-            <span>~</span>
-            <span>~</span>
-            <span>~</span>
-            <span>~</span>
+            <span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span>
         </div>
-
     </div>
 
+    <!-- 板块切换脚本 -->
+    <script>
+        const bubbles = document.querySelectorAll('.bubble');
+        const rooms = {
+            bottle: document.getElementById('room-bottle'),            瓶子: 文档.getElementById('房间-瓶子'),
+            log: document.getElementById('room-log'),            日志: 文档.getElementById('room-log''房间日志'),
+            skill技能: document文档.getElementById('room-skill''房间技能'),            技能: 文档.getElementById('room-skill'),
+            dream: document.getElementById('room-dream'),            梦: 文档.getElementById('room-dream''房间之梦'),
+            about关于: document文档.getElementById('room-about''房间-关于')            关于: 文档.getElementById('room-about')
+        };
+
+        bubbles.forEach(bubble => {        气泡.forEach(气泡 => {
+            bubble.addEventListener('click''点击', () => {            气泡.addEventListener('click', () => {
+                const roomKey = bubble.getAttribute('data-room');
+                Object.values(rooms).forEach(room => room.style.display = 'none');                对象.值(房间).遍历(房间 => 房间.样式.显示 = 'none');
+                rooms[roomKey].style.display = 'block';                房间[房间键].样式.显示 = '块级元素';
+                bubbles.forEach(b => b.classList.remove('active'));                气泡.forEach(气泡 => 气泡.classList.remove('active'));
+                bubble.classList.add('active');                气泡.classList.添加('active');
+            });
+        });
+    </script>
+
+    <!-- 不蒜子计数器脚本 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
