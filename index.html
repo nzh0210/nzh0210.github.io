@@ -1,157 +1,487 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sea Of Me · 赛博自己</title>
-    <meta name="description" content="存放我的想法、经验和天马行空的内在海域。" />
-    
-    <style>
-        /* ===== 全局重置 ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: "Georgia", "Times New Roman", "Songti SC", serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-            background: linear-gradient(145deg, #091a2e 0%, #132f4a 35%, #1a4a6e 70%, #0f2a40 100%);
-            background-attachment: fixed;
-            overflow-x: hidden;
-        }
-        .container {
-            max-width: 780px;
-            width: 100%;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.045);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 56px 44px 48px;
-            border-radius: 64px;
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-            position: relative;
-            overflow: hidden;
-        }
-        .container::before {
-            content: "";
-            position: absolute;
-            top: -80px; right: -80px;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(255, 150, 180, 0.20), transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 0;
-        }
-        .container::after {
-            content: "";
-            position: absolute;
-            bottom: -60px; left: -60px;
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(255, 120, 160, 0.15), transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 0;
-        }
-        .container>* { position: relative; z-index: 1; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sea Of Me · 赛博自己</title>
+    <meta name="description" content="存放我的想法、经验和天马行空的内在海域。" />
+    <style>
+        /* ===== 全局重置 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        /* ===== 头部 ===== */
-        .main-title {
-            font-size: 72px; font-weight: 700; letter-spacing: 10px;
-            color: #dcebf7;
-            text-shadow: 0 0 40px rgba(90, 180, 255, 0.20), 0 4px 20px rgba(0, 0, 0, 0.3);
-            margin-bottom: 4px; line-height: 1.1;
-        }
-        .title-ornament {
-            font-size: 13px; letter-spacing: 6px;
-            color: rgba(180, 210, 235, 0.35); font-weight: 300; font-style: italic;
-            margin-bottom: 18px; font-family: "Georgia", serif;
-        }
-        .subtitle {
-            font-size: 24px; font-weight: 300; letter-spacing: 6px;
-            color: #2a6b9e;
-            animation: breatheBlue 2.8s ease-in-out infinite;
-            margin-bottom: 34px; padding-bottom: 28px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        @keyframes breatheBlue {
-            0% { color: #1a4f7a; text-shadow: 0 0 6px rgba(40, 120, 200, 0.15); }
-            50% { color: #3a8fc9; text-shadow: 0 0 20px rgba(60, 150, 230, 0.35); }
-            100% { color: #1a4f7a; text-shadow: 0 0 6px rgba(40, 120, 200, 0.15); }
-        }
-        .description {
-            font-size: 18px; line-height: 2.1; color: #c8ddec; font-weight: 300;
-            text-align: left; padding: 0 4px; margin-bottom: 24px; letter-spacing: 0.5px;
-        }
-        .description .highlight { color: #f5b8c9; font-weight: 400; font-style: italic; }
-        .drop-cap { font-size: 28px; font-weight: 400; color: #e8c4d0; }
+        body {
+            font-family: "Georgia", "Times New Roman", "Songti SC", serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: linear-gradient(145deg, #091a2e 0%, #132f4a 35%, #1a4a6e 70%, #0f2a40 100%);
+            background-attachment: fixed;
+        }
 
-        /* ===== 导航气泡 ===== */
-        .nav-bubbles {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 30px;
-        }
-        .bubble-wrapper { position: relative; width: 56px; height: 56px; }
-        .bubble {
-            width: 100%; height: 100%; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #b5d4ed; font-size: 24px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.35s ease;
-            backdrop-filter: blur(8px); position: relative; z-index: 2;
-            user-select: none; overflow: hidden;
-        }
-        .bubble:hover {
-            background: rgba(255, 180, 200, 0.15);
-            border-color: rgba(255, 180, 200, 0.35);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);
-        }
-        .bubble-wrapper::after {
-            content: attr(data-tip);
-            position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
-            font-size: 11px; color: rgba(180, 210, 235, 0.6);
-            white-space: nowrap; opacity: 0; transition: opacity 0.3s;
-            pointer-events: none; z-index: 3;
-        }
-        .bubble-wrapper:hover::after { opacity: 1; }
+        .container {
+            max-width: 780px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.045);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 56px 44px 48px;
+            border-radius: 64px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-        .ripple {
-            position: absolute; top: 50%; left: 50%;
-            width: 0; height: 0; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            animation: rippleEffect 0.6s ease-out forwards;
-            pointer-events: none; z-index: 1;
-        }
-        @keyframes rippleEffect {
-            0% { width: 0; height: 0; opacity: 0.8; }
-            100% { width: 120px; height: 120px; opacity: 0; }
-        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 150, 180, 0.20), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-        /* ===== 抽屉遮罩层 ===== */
-        .drawer-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;            位置: 固定; 顶部: 0; 左侧: 0; 宽度: 100视口宽度; 高度: 100视口高度;
-            background: rgba(0, 0, 0, 0.5);            背景: rgba(0, 0, 0, 0.5);
-            backdrop-filter背景滤镜: blur模糊(4px); -webkit-backdrop-filter-webkit-背景滤镜: blur模糊(4px);            背景滤镜: 模糊(4px); -webkit-背景滤镜: 模糊(4px);
-            z-index: 999; opacity: 0; visibility: hidden;            z-index: 999; opacity: 0; visibility可见性: hidden隐藏;
-            transition: opacity 0.4s ease, visibility 0.4s;        }        .drawer-overlay.show { opacity: 1; visibility: visible; }            过渡: 不透明度 0.4秒 缓动, 可见性 0.4秒;        }        .抽屉覆盖层.显示 { 不透明度: 1; 可见性: 可见; }
-        .drawer-panel {            position: fixed; bottom: 0; left: 0; width: 100%; height: 85vh;            background: linear-gradient(180deg, rgba(13, 30, 50, 0.95) 0%, rgba(20, 45, 70, 0.98) 100%);            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);            border-radius: 48px 48px 0 0;            border: 1px solid rgba(255, 255, 255, 0.08);            box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7);            z-index: 1000;            transform: translateY(100%);            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);            padding: 40px 32px 32px;            display: flex; flex-direction: column;            color: #c8ddec; overflow-y: auto;        }        .drawer-panel.show { transform: translateY(0); }        .drawer-panel {            position: fixed; bottom: 0; left: 0; width: 100%; height: 85vh;            background: linear-gradient(180度, rgba(13, 30, 50, 0.95) 0%, rgba(20, 45, 70, 0.98) 100%);            背景滤镜: 模糊(20px); -webkit-背景滤镜: 模糊(20px);            圆角: 48px 48px 0 0;            边框: 1px 实线 rgba(255, 255, 255, 0.08);            box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7);            z-index: 1000;            transform: translateY(100%);            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);            padding: 40px 32px 32px;            display: flex; flex-direction: column;            color: #c8ddec; overflow-y: auto;        }        .drawer-panel.show { transform: translateY(0); }：#c8ddec；overflow-y: auto;        }        .drawer-panel.show { transform: translateY(0); }
-        .drawer-close {            position: absolute; top: 24px; right: 28px;            width: 44px; height: 44px; border-radius: 50%;            background: rgba(255, 255, 255, 0.06);            border: 1px solid rgba(255, 255, 255, 0.15);            color: #b5d4ed; font-size: 20px;            display: flex; align-items: center; justify-content: center;            cursor: pointer; transition: all 0.3s; z-index: 10;            backdrop-filter: blur(4px);        }        .drawer-close:hover {            background: rgba(255, 150, 180, 0.2);            border-color: rgba(255, 150, 180, 0.4);            transform: rotate(90deg);        }        .drawer-close {            position: absolute; top: 24px; right: 28px;            width: 44px; height: 44px; border-radius: 50%;            background: rgba(255, 255, 255, 0.06);            border: 1px solid rgba(255, 255, 255, 0.15);            color: #b5d4ed; 字体大小: 20px;            显示方式: 弹性布局; 对齐方式: 居中; justify-content: 居中;            指针: 光标; 过渡: 所有属性 0.3秒; z-index: 10;            背景滤镜: 模糊(4px);        }        .drawer-close:悬停 {            background: rgba(255, 150, 180, 0.2);            边框颜色: rgba(255, 150, 180, 0.4);            变换: 旋转(90度);        }：#b5d4ed；字体大小: 20px;            显示方式: 弹性布局; 对齐方式: 居中; justify-content: 居中;            指针: 光标; 过渡: 所有属性 0.3秒; z-index: 10;            背景滤镜: 模糊(4px);        }        .drawer-close:悬停 {            background: rgba(255, 150, 180, 0.2);            边框颜色: rgba(255, 150, 180, 0.4);            变换: 旋转(90度);        }
-        .drawer-room { display: none; flex: 1; }        .drawer-room.active { display: block; }        .drawer-room-title {            font-size: 26px; letter-spacing: 4px; color: #b5d4ed;            margin-bottom: 24px; font-weight: 400;            border-bottom: 1px solid rgba(255, 255, 255, 0.07);            padding-bottom: 14px;        }        .drawer-room-content { font-size: 16px; line-height: 2; color: #bdd6e8; font-weight: 300; }        .drawer-room { display: none; flex: 1; }        .drawer-room.active { display: block; }        .drawer-room-title {            font-size: 26px; letter-spacing: 4px; color: #b5d4ed;            下边距: 24px; 字体粗细: 400;            下边框: 1px 实线 rgba(255, 255, 255, 0.07);            下内边距: 14px;        }        .抽屉内容区 { font-size: 16px; 行高: 2; color: #bdd6e8； 字体粗细: 300; }
-        /* 瓶子等样式 */        .bottle-item {            background: rgba(255, 255, 255, 0.04);            border-left: 2px solid rgba(255, 150, 180, 0.35);            padding: 12px 16px; margin-bottom: 12px;            border-radius: 0 12px 12px 0; font-style: italic;        }        .log-entry { margin-bottom: 20px; }        .log-entry h4 { font-weight: 400; color: #f0c8d5; margin-bottom: 6px; font-size: 18px; }        .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }        .skill-tag {            background: rgba(255, 255, 255, 0.06);            border: 1px solid rgba(255, 255, 255, 0.1);            padding: 6px 16px; border-radius: 20px;            font-size: 14px; color: #d5e5f2;        }        .dream-card {            background: rgba(255, 255, 255, 0.03);            padding: 16px; border-radius: 18px;            margin-bottom: 12px; border: 1px dashed rgba(255, 200, 220, 0.2);        }        /* 瓶子等样式 */        .bottle-item {            background: rgba(255, 255, 255, 0.04);            border-left: 2px solid rgba(255, 150, 180, 0.35);            padding: 12px 16px; 下边距: 12px;            圆角半径: 0 12px 12px 0; 字体样式: 斜体;        }        .日志条目 { 下边距: 20px; }        .日志条目 h4 { 字体粗细: 400; 颜色：#f0c8d5； 下边距: 6px; 字体大小: 18px; }        .技能标签 { 显示方式: 弹性布局; 换行: 自动换行; 间距: 8px; }        .技能标签 {            background: rgba(255, 255, 255, 0.06);            边框: 1px solid rgba(255, 255, 255, 0.1);            padding: 6px 16px; 圆角半径: 20px;            字体大小: 14px; 颜色：#d5e5f2；        }        .梦想卡 {            background: rgba(255, 255, 255, 0.03);            padding: 16px; 圆角半径: 18px;            下边距: 12px; 边框: 1px 虚线 rgba(255, 200, 220, 0.2);        }
-        /* 访客计数器 */        .visitor-counter {            font-size: 14px; letter-spacing: 2px;            color: rgba(180, 210, 235, 0.5);            margin-bottom: 16px; font-style: italic; font-weight: 300;            display: flex; align-items: center; justify-content: center; gap: 6px;        }        .visitor-counter .icon { font-size: 16px; }        .visitor-counter #busuanzi_value_site_uv { color: #f5b8c9; font-weight: 400; }
-        .wave-footer {            margin-top: 0; padding-top: 24px;            border-top: 1px solid rgba(255, 255, 255, 0.04);            font-size: 28px; letter-spacing: 12px;            opacity: 0.30; color: rgba(180, 210, 235, 0.25);            font-weight: 100; user-select: none;        }        .wave-footer span {            display: inline-block; animation: waveFloat 3s ease-in-out infinite;        }        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }        @keyframes waveFloat {            0%, 100% { transform: translateY(0px); opacity: 0.3; }            50% { transform: translateY(-4px); opacity: 0.8; }        }        .wave-footer {            margin-top: 0; padding-top: 24px;            border-top: 1px solid rgba(255, 255, 255, 0.04);            字体大小: 28px; 字距: 12px;            透明度: 0.30; 颜色: rgba(180, 210, 235, 0.25);            字体粗细: 100; 禁止用户选择: 无;        }        .wave-footer span {            显示方式: 行内块级; 动画: 波浪浮动 3秒 缓入缓出 无限循环;        }        .wave-footer span:第n个子元素(2) { 动画延迟: 0.4秒; }        .wave-footer span:第n个子元素(3) { 动画延迟: 0.8秒; }        .wave-footer span:第n个子元素(4) { 动画延迟: 1.2秒; }        .wave-footer span:第n个子元素(5) { 动画延迟: 1.6秒; }        .wave-footer span:第n个子元素(6) { 动画延迟: 2.0秒; }        .wave-footer span:第n个子元素(7) { 动画延迟: 2.4秒; }        @keyframes 波浪浮动 {            0%, 100% { 变换: 平移Y(0px); 透明度: 0.3; }            50% { 变换: 平移Y(-4px); 透明度: 0.8; }        }
-        @media (max-width: 600px) {            .container { padding: 32px 18px 30px; border-radius: 40px; }            .main-title { font-size: 40px; letter-spacing: 5px; }            .subtitle { font-size: 18px; letter-spacing: 4px; }            .description { font-size: 16px; line-height: 2; }            .bubble-wrapper { width: 44px; height: 44px; }            .bubble { font-size: 20px; }            .drawer-panel { height: 90vh; padding: 32px 18px 24px; }            .drawer-room-title { font-size: 21px; }        }    </style></head><body>
-    <div class="container">        <h1 class="main-title">Sea Of Me</h1>        <div class="title-ornament">✦ a quiet ocean within ✦</div>        <div class="subtitle">我的内心海洋</div>        <div class="description">            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />            我把自己的思绪、情绪和安静的瞬间，            <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />            如果你捡到了什么，那是海想让你看到的。        </div>    <div class="container">        <h1 class="main-title">海之我</h1>        <div class="title-ornament">✦ 内心的一片静谧海洋 ✦</div>        <div class="subtitle">我的内心海洋</div>        <div class="description">            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />            我把自己的思绪、情绪和安静的瞬间，            <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />            如果你捡到了什么，那是海想让你看到的。        </div>
-        <div class="nav-bubbles">            <div class="bubble-wrapper" data-tip="漂流瓶" data-room="bottle">                <div class="bubble">🌊</div>            </div>            <div class="bubble-wrapper" data-tip="日志" data-room="log">                <div class="bubble">📜</div>            </div>            <div class="bubble-wrapper" data-tip="技能" data-room="skill">                <div class="bubble">⚓</div>            </div>            <div class="bubble-wrapper" data-tip="天马" data-room="dream">                <div class="bubble">✨</div>            </div>            <div class="bubble-wrapper" data-tip="关于" data-room="about">                <div class="bubble">🐚</div>            </div>        </div>        <div class="nav-bubbles">            <div class="bubble-wrapper" data-tip="漂流瓶" data-room="bottle">                <div class="bubble">🌊</div>            </div>            <div class="bubble-wrapper" data-tip="日志" data-room="log">                <div class="bubble">📜</div>            </div>            <div class="bubble-wrapper" data-tip="技能" data-room=“技能”>                <div class="bubble">⚓</div>            </div>            <div class="bubble-wrapper" data-tip=“天马” data-room=“梦想”>                <div class="bubble">✨</div>            </div>            <div class="bubble-wrapper" data-tip=“关于” data-room=“about”>                <div class="bubble">🐚</div>            </div>        </div>
-        <div class="visitor-counter">            <span class="icon">🫧</span>            <span>已有</span>            <span id="busuanzi_value_site_uv">…</span>            <span>位访客漂流至此</span>        </div>
-        <div class="wave-footer">            <span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span>        </div>    </div>
-    <!-- 抽屉结构 -->    <div class="drawer-overlay" id="drawerOverlay"></div>    <div class="drawer-panel" id="drawerPanel">        <div class="drawer-close" id="drawerClose">✕</div>
-        <div class="drawer-room active" id="drawer-bottle">            <div class="drawer-room-title">🌊 漂流瓶海</div>            <div class="drawer-room-content" id="content-bottle"></div>        </div>        <div class="drawer-room" id="drawer-log">            <div class="drawer-room-title">📜 日志暗礁</div>            <div class="drawer-room-content" id="content-log"></div>        </div>        <div class="drawer-room" id="drawer-skill">            <div class="drawer-room-title">⚓ 技能与印记</div>            <div class="drawer-room-content" id="content-skill"></div>        </div>        <div class="drawer-room" id="drawer-dream">            <div class="drawer-room-title">✨ 天马行空画廊</div>            <div class="drawer-room-content" id="content-dream"></div>        </div>        <div class="drawer-room" id="drawer-about">            <div class="drawer-room-title">🐚 关于我这片海</div>            <div class="drawer-room-content" id="content-about"></div>        </div>    </div>        <div class="drawer-room active" id="drawer-bottle">            <div class="drawer-room-title">漂流瓶海</div>            <div class="drawer-room-content" id="content-bottle"></div>        </div>        <div class="drawer-room" id=“drawer-log”>            <div class="drawer-room-title"> 日志暗礁</div>            <div class="drawer-room-content" id=“content-log”></div>        </div>        <div class="drawer-room" id=“drawer-skill”>            <div class="drawer-room-title">⚓ 技能与印记</div>            <div class="drawer-room-content" id=“content-skill”></div>        </div>        <div class="drawer-room" id=“drawer-dream”>            <div class="drawer-room-title">✨ 天马行空画廊</div>            <div class="drawer-room-content" id=“content-dream”></div>        </div>        <div class="drawer-room" id=“drawer-about”>            <div class="drawer-room-title"> 关于我这片海</div>            <div class="drawer-room-content" id=“content-about”></div>        </div>    </div>
-    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                if (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==// ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));    <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                if (data.log) {                    let html = '';                        <script>        // ========== 加载 content.json 内容 ==========        fetch('content.json')            .then(response => response.json())            .then(data => {                if (data.bottle) {                    let html = '';                    data.bottle.forEach(text => html += `<div class="bottle-item">${text}</div>`);                    document.getElementById('content-bottle').innerHTML = html;                }                如果 (data.log) {                    let html = '';                    data.log.forEach(entry => html += `<div class="log-entry"><h4>${entry.title}</h4><p>${entry.text}</p></div>`);                    document.getElementById('content-log').innerHTML = html;                }                if (data.skill) {                    let html = '<div class="skill-tags">';                    data.skill.forEach(skill => html += `<span class="skill-tag">${skill}</span>`);                    html += '</div>';                    document.getElementById('content-skill').innerHTML = html;                }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                if (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }                  }                如果 (data.dream) {                    let html = '';                    data.dream.forEach(text => html += `<div class="dream-card">${text}</div>`);                    document.getElementById('content-dream').innerHTML = html;                }                如果 (data.about) {                    let html = '';                    data.about.forEach(text => html += `<p>${text}</p>`);                    document.getElementById('content-about').innerHTML = html;                }            })            .catch(err => console.error('加载内容失败:', err));
-        // ========== 抽屉与波纹逻辑 ==========        const bubbleWrappers = document.querySelectorAll('.bubble-wrapper');        const drawerOverlay = document.getElementById('drawerOverlay');        const drawerPanel = document.getElementById('drawerPanel');        const drawerClose = document.getElementById('drawerClose');        const drawerRooms = {            bottle: document.getElementById('drawer-bottle'),            log: document.getElementById('drawer-log'),            skill: document.getElementById('drawer-skill'),            dream: document.getElementById('drawer-dream'),            about: document.getElementById('drawer-about')        };        let currentRoom = 'bottle';
-        bubbleWrappers.forEach(wrapper => {            const bubble = wrapper.querySelector('.bubble');            const roomKey = wrapper.getAttribute('data-room');
-            wrapper.addEventListener('click', (e) => {                const ripple = document.createElement('span');                ripple.className = 'ripple';                bubble.appendChild(ripple);                ripple.addEventListener('animationend', () => ripple.remove());            wrapper.addEventListener('click', (e) => {                const ripple = document.createElement('span');                ripple.类名 = '涟漪';                气泡.追加子节点(ripple);                ripple.addEventListener('动画结束', () => ripple.移除());
-                if (currentRoom !== roomKey) {                    drawerRooms[currentRoom].classList.remove('active');                    drawerRooms[roomKey].classList.add('active');                    currentRoom = roomKey;                }                如果 (currentRoom !== roomKey) {                    drawerRooms[currentRoom].classList.remove('active');                    drawerRooms[roomKey].classList.add('active');                    currentRoom = roomKey;                }
-                drawerOverlay.classList.add('show');                drawerPanel.classList.add('show');            });        });
-        function closeDrawer() {            drawerOverlay.classList.remove('show');            drawerPanel.classList.remove('show');        }        函数 closeDrawer() {            drawerOverlay.classList.remove('show');            drawerPanel.classList.remove('show');        }
-        drawerClose.addEventListener('click', closeDrawer);        drawerOverlay.addEventListener('click', closeDrawer);        document.addEventListener('keydown', (e) => {            if (e.key === 'Escape') closeDrawer();        });    </script>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></body></html>
+        .container::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 120, 160, 0.15), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== 头部（不变） ===== */
+        .main-title {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: 10px;
+            color: #dcebf7;
+            text-shadow: 0 0 40px rgba(90, 180, 255, 0.20), 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 4px;
+            line-height: 1.1;
+        }
+
+        .title-ornament {
+            font-size: 13px;
+            letter-spacing: 6px;
+            color: rgba(180, 210, 235, 0.35);
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 18px;
+            font-family: "Georgia", serif;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 6px;
+            color: #2a6b9e;
+            animation: breatheBlue 2.8s ease-in-out infinite;
+            margin-bottom: 34px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        @keyframes breatheBlue {
+            0% {
+                color: #1a4f7a;
+                text-shadow: 0 0 6px rgba(40, 120, 200, 0.15);
+            }
+            50% {
+                color: #3a8fc9;
+                text-shadow: 0 0 20px rgba(60, 150, 230, 0.35);
+            }
+            100% {
+                color: #1a4f7a;
+                text-shadow: 0 0 6px rgba(40, 120, 200, 0.15);
+            }
+        }
+
+        .description {
+            font-size: 18px;
+            line-height: 2.1;
+            color: #c8ddec;
+            font-weight: 300;
+            text-align: left;
+            padding: 0 4px;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .description .highlight {
+            color: #f5b8c9;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .drop-cap {
+            font-size: 28px;
+            font-weight: 400;
+            color: #e8c4d0;
+        }
+
+        /* ===== 导航气泡 ===== */
+        .nav-bubbles {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .bubble {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #b5d4ed;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(8px);
+            position: relative;
+            user-select: none;
+        }
+
+        .bubble:hover {
+            background: rgba(255, 180, 200, 0.15);
+            border-color: rgba(255, 180, 200, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);
+        }
+
+        .bubble.active {
+            background: rgba(255, 150, 180, 0.25);
+            border-color: rgba(255, 150, 180, 0.55);
+            color: #fce4ec;
+            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .bubble::after {
+            content: attr(data-tip);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(180, 210, 235, 0.6);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .bubble:hover::after {
+            opacity: 1;
+        }
+
+        /* ===== 板块内容容器 ===== */
+        .room-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 40px;
+            padding: 36px 28px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 220px;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #c8ddec;
+        }
+
+        .room-title {
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: #b5d4ed;
+            margin-bottom: 20px;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding-bottom: 12px;
+        }
+
+        .room-content {
+            font-size: 16px;
+            line-height: 2;
+            color: #bdd6e8;
+            font-weight: 300;
+        }
+
+        .bottle-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 2px solid rgba(255, 150, 180, 0.35);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+        }
+
+        .log-entry {
+            margin-bottom: 20px;
+        }
+        .log-entry h4 {
+            font-weight: 400;
+            color: #f0c8d5;
+            margin-bottom: 6px;
+            font-size: 18px;
+        }
+        .log-entry p {
+            color: #bdd6e8;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #d5e5f2;
+        }
+
+        .dream-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            border: 1px dashed rgba(255, 200, 220, 0.2);
+        }
+
+        .about-text p {
+            margin-bottom: 14px;
+        }
+
+        /* ===== 访客计数器样式 ===== */
+        .visitor-counter {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: rgba(180, 210, 235, 0.5);
+            margin-bottom: 16px;
+            font-style: italic;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .visitor-counter .icon {
+            font-size: 16px;
+        }
+
+        .visitor-counter #busuanzi_value_site_uv {
+            color: #f5b8c9;
+            font-weight: 400;
+        }
+
+        /* ===== 底部波浪不变 ===== */
+        .wave-footer {
+            margin-top: 0;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 28px;
+            letter-spacing: 12px;
+            opacity: 0.30;
+            color: rgba(180, 210, 235, 0.25);
+            font-weight: 100;
+            user-select: none;
+        }
+
+        .wave-footer span {
+            display: inline-block;
+            animation: waveFloat 3s ease-in-out infinite;
+        }
+        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }
+        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }
+        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }
+        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }
+        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }
+        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }
+
+        @keyframes waveFloat {
+            0%, 100% {
+                transform: translateY(0px);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-4px);
+                opacity: 0.8;
+            }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 600px) {
+            .container {
+                padding: 32px 18px 30px;
+                border-radius: 40px;
+            }
+            .main-title {
+                font-size: 40px;
+                letter-spacing: 5px;
+            }
+            .subtitle {
+                font-size: 18px;
+                letter-spacing: 4px;
+            }
+            .description {
+                font-size: 16px;
+                line-height: 2;
+            }
+            .bubble {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            .room-container {
+                padding: 24px 16px;
+            }
+            .room-title {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- 头部（不变） -->
+        <h1 class="main-title">Sea Of Me</h1>
+        <div class="title-ornament">✦ a quiet ocean within ✦</div>
+        <div class="subtitle">我的内心海洋</div>
+        <div class="description">
+            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />
+            我把自己的思绪、情绪和安静的瞬间，
+            <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />
+            如果你捡到了什么，那是海想让你看到的。
+        </div>
+
+        <!-- 五个气泡导航 -->
+        <div class="nav-bubbles">
+            <div class="bubble active" data-room="bottle" data-tip="漂流瓶">🌊</div>
+            <div class="bubble" data-room="log" data-tip="日志">📜</div>
+            <div class="bubble" data-room="skill" data-tip="技能">⚓</div>
+            <div class="bubble" data-room="dream" data-tip="天马">✨</div>
+            <div class="bubble" data-room="about" data-tip="关于">🐚</div>
+        </div>
+
+        <!-- 板块内容区 -->
+        <div class="room-container" id="room-bottle">
+            <div class="room-title">🌊 漂流瓶海</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的漂流瓶内容 ===== -->
+                <div class="bottle-item">我昨晚梦见自己是一行代码。</div>
+                <div class="bottle-item">学会拒绝的那天，下着雨。</div>
+                <!-- 继续添加更多瓶子 -->
+            </div>
+        </div>
+
+        <div class="room-container" id="room-log" style="display:none;">
+            <div class="room-title">📜 日志暗礁</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的日志 ===== -->
+                <div class="log-entry">
+                    <h4>日志标题示例</h4>
+                    <p>在这里写你的经历或思考……</p >
+                </div>
+            </div>
+        </div>
+
+        <div class="room-container" id="room-skill" style="display:none;">
+            <div class="room-title">⚓ 技能与印记</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的技能标签 ===== -->
+                <div class="skill-tags">
+                    <span class="skill-tag">能在三秒内辨认云的类型</span>
+                    <span class="skill-tag">会做一种很酸的柠檬挞</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="room-container" id="room-dream" style="display:none;">
+            <div class="room-title">✨ 天马行空画廊</div>
+            <div class="room-content">
+                <!-- ===== 在这里添加你的天马行空 ===== -->
+                <div class="dream-card">
+                    平行宇宙里我是一个面包师，每天闻着黄油醒来。
+                </div>
+            </div>
+        </div>
+
+        <div class="room-container" id="room-about" style="display:none;">
+            <div class="room-title">🐚 关于我这片海</div>
+            <div class="room-content about-text">
+                <!-- ===== 在这里写自我介绍或价值观 ===== -->
+                <p>我是这片海域的主人，一个喜欢收集思绪的人。</p >
+                <p>我相信每个念头都值得被温柔存放。</p >
+            </div>
+        </div>
+
+        <!-- ===== 访客计数器 ===== -->
+        <div class="visitor-counter">
+            <span class="icon">🫧</span>
+            <span>已有</span>
+            <span id="busuanzi_value_site_uv">…</span>
+            <span>位访客漂流至此</span>
+        </div>
+
+        <!-- 底部波浪 -->
+        <div class="wave-footer">
+            <span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span>
+        </div>
+    </div>
+
+    <!-- 板块切换脚本 -->
+    <script>
+        const bubbles = document.querySelectorAll('.bubble');
+        const rooms = {
+            bottle: document.getElementById('room-bottle'),            瓶子: 文档.getElementById('房间-瓶子'),
+            log: document.getElementById('room-log'),            日志: 文档.getElementById('room-log''房间日志'),
+            skill技能: document文档.getElementById('room-skill''房间技能'),            技能: 文档.getElementById('room-skill'),
+            dream: document.getElementById('room-dream'),            梦: 文档.getElementById('room-dream''房间之梦'),
+            about关于: document文档.getElementById('room-about''房间-关于')            关于: 文档.getElementById('room-about')
+        };
+
+        bubbles.forEach(bubble => {        气泡.forEach(气泡 => {
+            bubble.addEventListener('click''点击', () => {            气泡.addEventListener('click', () => {
+                const roomKey = bubble.getAttribute('data-room');
+                Object.values(rooms).forEach(room => room.style.display = 'none');                对象.值(房间).遍历(房间 => 房间.样式.显示 = 'none');
+                rooms[roomKey].style.display = 'block';                房间[房间键].样式.显示 = '块级元素';
+                bubbles.forEach(b => b.classList.remove('active'));                气泡.forEach(气泡 => 气泡.classList.remove('active'));
+                bubble.classList.add('active');                气泡.classList.添加('active');
+            });
+        });
+    </script>
+
+    <!-- 不蒜子计数器脚本 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
