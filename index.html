@@ -165,61 +165,424 @@
             font-size: 24px;
             display: flex;
             align-items: center;
-            justify-content: center;            cursor: pointer;            transition: all 0.35s ease;            backdrop-filter: blur(8px);            position: relative;            user-select: none;        }
-        .bubble:hover {            background: rgba(255, 180, 200, 0.15);            border-color: rgba(255, 180, 200, 0.35);            transform: translateY(-4px);            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);        }
-        .bubble.active {            background: rgba(255, 150, 180, 0.25);            border-color: rgba(255, 150, 180, 0.55);            color: #fce4ec;            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);            transform: translateY(-4px);        }
-        .bubble::after {            content: attr(data-tip);            position: absolute;            top: -30px;            left: 50%;            transform: translateX(-50%);            font-size: 11px;            color: rgba(180, 210, 235, 0.6);            white-space: nowrap;            opacity: 0;            transition: opacity 0.3s;            pointer-events: none;        }
-        .bubble:hover::after {            opacity: 1;        }
-        /* ===== 板块内容容器 ===== */        .room-container {            background: rgba(255, 255, 255, 0.03);            border-radius: 40px;            padding: 36px 28px 30px;            border: 1px solid rgba(255, 255, 255, 0.05);            min-height: 220px;            transition: background 0.3s;            margin-bottom: 20px;            text-align: left;            color: #c8ddec;        }
-        .room-title {            font-size: 22px;            letter-spacing: 4px;            color: #b5d4ed;            margin-bottom: 20px;            font-weight: 400;            border-bottom: 1px solid rgba(255, 255, 255, 0.07);            padding-bottom: 12px;        }
-        .room-content {            font-size: 16px;            line-height: 2;            color: #bdd6e8;            font-weight: 300;        }
-        .bottle-item {            background: rgba(255, 255, 255, 0.04);            border-left: 2px solid rgba(255, 150, 180, 0.35);            padding: 12px 16px;            margin-bottom: 12px;            border-radius: 0 12px 12px 0;            font-style: italic;        }
-        .log-entry {            margin-bottom: 20px;        }        .log-entry h4 {            font-weight: 400;            color: #f0c8d5;            margin-bottom: 6px;            font-size: 18px;        }        .log-entry p {            color: #bdd6e8;        }
-        .skill-tags {            display: flex;            flex-wrap: wrap;            gap: 8px;        }        .skill-tag {            background: rgba(255, 255, 255, 0.06);            border: 1px solid rgba(255, 255, 255, 0.1);            padding: 6px 16px;            border-radius: 20px;            font-size: 14px;            color: #d5e5f2;        }
-        .dream-card {            background: rgba(255, 255, 255, 0.03);            padding: 16px;            border-radius: 18px;            margin-bottom: 12px;            border: 1px dashed rgba(255, 200, 220, 0.2);        }
-        .about-text p {            margin-bottom: 14px;        }
-        /* ===== 访客计数器 ===== */        .visitor-counter {            font-size: 14px;            letter-spacing: 2px;            color: rgba(180, 210, 235, 0.5);            margin-bottom: 16px;            font-style: italic;            font-weight: 300;            display: flex;            align-items: center;            justify-content: center;            gap: 6px;        }
-        .visitor-counter .icon {            font-size: 16px;        }
-        .visitor-counter #busuanzi_value_site_uv {            color: #f5b8c9;            font-weight: 400;        }
-        /* ===== 底部波浪 ===== */        .wave-footer {            margin-top: 0;            padding-top: 24px;            border-top: 1px solid rgba(255, 255, 255, 0.04);            font-size: 28px;            letter-spacing: 12px;            opacity: 0.30;            color: rgba(180, 210, 235, 0.25);            font-weight: 100;            user-select: none;        }
-        .wave-footer span {            display: inline-block;            animation: waveFloat 3s ease-in-out infinite;        }        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }
-        @keyframes waveFloat {            0%, 100% {                transform: translateY(0px);                opacity: 0.3;            }            50% {                transform: translateY(-4px);                opacity: 0.8;            }        }
-        /* ============================================================                   新增：抽屉 + 遮罩层                   ============================================================ */
-        /* 遮罩层：调暗背景，保留毛玻璃质感 */        .drawer-overlay {            position: fixed;            top: 0;            left: 0;            width: 100vw;            height: 100vh;            background: rgba(0, 0, 0, 0.55);            backdrop-filter: blur(6px);            -webkit-backdrop-filter: blur(6px);            z-index: 999;            opacity: 0;            visibility: hidden;            transition: opacity 0.4s ease, visibility 0.4s ease;        }
-        .drawer-overlay.show {            opacity: 1;            visibility: visible;        }
-        /* 抽屉主体：从底部升起 */        .drawer-panel {            position: fixed;            bottom: 0;            left: 0;            width: 100%;            max-height: 80vh;            background: linear-gradient(160deg, rgba(13, 30, 50, 0.96), rgba(20, 45, 70, 0.98));            backdrop-filter: blur(20px);            -webkit-backdrop-filter: blur(20px);            border-radius: 48px 48px 0 0;            border: 1px solid rgba(255, 255, 255, 0.06);            box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6);            z-index: 1000;            transform: translateY(100%);            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);            padding: 32px 28px 28px;            display: flex;            flex-direction: column;            color: #c8ddec;            overflow: hidden;        }
-        .drawer-panel.show {            transform: translateY(0);        }
-        /* 抽屉头部 */        .drawer-header {            display: flex;            justify-content: space-between;            align-items: center;            border-bottom: 1px solid rgba(255, 255, 255, 0.06);            padding-bottom: 14px;            margin-bottom: 20px;            flex-shrink: 0;        }
-        .drawer-header h2 {            font-size: 22px;            font-weight: 400;            color: #b5d4ed;            letter-spacing: 4px;        }
-        .drawer-close {            width: 44px;            height: 44px;            border-radius: 50%;            background: rgba(255, 255, 255, 0.06);            border: 1px solid rgba(255, 255, 255, 0.12);            color: #b5d4ed;            font-size: 20px;            cursor: pointer;            transition: all 0.3s;            display: flex;            align-items: center;            justify-content: center;        }
-        .drawer-close:hover {            background: rgba(255, 150, 180, 0.2);            border-color: rgba(255, 150, 180, 0.4);            transform: rotate(90deg);        }
-        /* 抽屉表单 */        .drawer-form {            flex-shrink: 0;            margin-bottom: 18px;        }
-        .drawer-form input,        .drawer-form textarea {            width: 100%;            background: rgba(255, 255, 255, 0.06);            border: 1px solid rgba(255, 255, 255, 0.12);            color: #c8ddec;            padding: 14px 18px;            border-radius: 16px;            font-family: inherit;            font-size: 15px;            margin-bottom: 12px;            outline: none;            transition: border 0.3s;        }
-        .drawer-form input:focus,        .drawer-form textarea:focus {            border-color: rgba(255, 150, 180, 0.4);        }
-        .drawer-form textarea {            resize: vertical;            min-height: 70px;        }
-        .drawer-form .btn-submit {            background: rgba(255, 150, 180, 0.25);            border: none;            color: #fce4ec;            padding: 12px 32px;            border-radius: 30px;            font-size: 15px;            cursor: pointer;            transition: all 0.3s;            font-family: inherit;            letter-spacing: 2px;        }
-        .drawer-form .btn-submit:hover {            background: rgba(255, 150, 180, 0.45);            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);        }
-        /* 抽屉内容列表 */        .drawer-list {            overflow-y: auto;            flex: 1;            padding-right: 4px;        }
-        .drawer-list::-webkit-scrollbar {            width: 4px;        }
-        .drawer-list::-webkit-scrollbar-track {            background: rgba(255, 255, 255, 0.03);            border-radius: 4px;        }
-        .drawer-list::-webkit-scrollbar-thumb {            background: rgba(255, 150, 180, 0.2);            border-radius: 4px;        }
-        .drawer-item {            background: rgba(255, 255, 255, 0.03);            border-left: 2px solid rgba(255, 150, 180, 0.25);            padding: 14px 18px;            margin-bottom: 12px;            border-radius: 0 16px 16px 0;        }
-        .drawer-item .item-title {            font-weight: 400;            color: #f0c8d5;            font-size: 17px;            margin-bottom: 4px;        }
-        .drawer-item .item-content {            color: #bdd6e8;            font-size: 15px;            line-height: 1.7;        }
-        .drawer-item .item-time {            font-size: 12px;            color: rgba(180, 210, 235, 0.35);            margin-top: 8px;        }
-        .drawer-empty {            color: rgba(180, 210, 235, 0.4);            font-style: italic;            text-align: center;            padding: 30px 0;            font-size: 15px;        }
-        /* ===== 响应式 ===== */        @media (max-width: 600px) {            .container {                padding: 32px 18px 30px;                border-radius: 40px;            }            .main-title {                font-size: 40px;                letter-spacing: 5px;            }            .subtitle {                font-size: 18px;                letter-spacing: 4px;            }            .description {                font-size: 16px;                line-height: 2;            }            .bubble {                width: 44px;                height: 44px;                font-size: 20px;            }            .room-container {                padding: 24px 16px;            }            .room-title {                font-size: 19px;            }            .drawer-panel {                padding: 24px 18px 20px;                border-radius: 32px 32px 0 0;                max-height: 85vh;            }            .drawer-header h2 {                font-size: 19px;            }        }    </style></head><body>
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(8px);
+            position: relative;
+            user-select: none;
+        }
+
+        .bubble:hover {
+            background: rgba(255, 180, 200, 0.15);
+            border-color: rgba(255, 180, 200, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);
+        }
+
+        .bubble.active {
+            background: rgba(255, 150, 180, 0.25);
+            border-color: rgba(255, 150, 180, 0.55);
+            color: #fce4ec;
+            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .bubble::after {
+            content: attr(data-tip);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(180, 210, 235, 0.6);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .bubble:hover::after {
+            opacity: 1;
+        }
+
+        /* ===== 板块内容容器 ===== */
+        .room-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 40px;
+            padding: 36px 28px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 220px;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #c8ddec;
+        }
+
+        .room-title {
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: #b5d4ed;
+            margin-bottom: 20px;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding-bottom: 12px;
+        }
+
+        .room-content {
+            font-size: 16px;
+            line-height: 2;
+            color: #bdd6e8;
+            font-weight: 300;
+        }
+
+        .bottle-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 2px solid rgba(255, 150, 180, 0.35);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+        }
+
+        .log-entry {
+            margin-bottom: 20px;
+        }
+        .log-entry h4 {
+            font-weight: 400;
+            color: #f0c8d5;
+            margin-bottom: 6px;
+            font-size: 18px;
+        }
+        .log-entry p {
+            color: #bdd6e8;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #d5e5f2;
+        }
+
+        .dream-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            border: 1px dashed rgba(255, 200, 220, 0.2);
+        }
+
+        .about-text p {
+            margin-bottom: 14px;
+        }
+
+        /* ===== 访客计数器 ===== */
+        .visitor-counter {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: rgba(180, 210, 235, 0.5);
+            margin-bottom: 16px;
+            font-style: italic;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .visitor-counter .icon {
+            font-size: 16px;
+        }
+
+        .visitor-counter #busuanzi_value_site_uv {
+            color: #f5b8c9;
+            font-weight: 400;
+        }
+
+        /* ===== 底部波浪 ===== */
+        .wave-footer {
+            margin-top: 0;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 28px;
+            letter-spacing: 12px;
+            opacity: 0.30;
+            color: rgba(180, 210, 235, 0.25);
+            font-weight: 100;
+            user-select: none;
+        }
+
+        .wave-footer span {
+            display: inline-block;
+            animation: waveFloat 3s ease-in-out infinite;
+        }
+        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }
+        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }
+        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }
+        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }
+        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }
+        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }
+
+        @keyframes waveFloat {
+            0%, 100% {
+                transform: translateY(0px);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-4px);
+                opacity: 0.8;
+            }
+        }
+
+        /* ============================================================
+           新增：抽屉 + 遮罩层（保留原有质感）
+           ============================================================ */
+
+        /* 遮罩层：调暗背景，保留毛玻璃质感 */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .drawer-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 抽屉主体：从底部升起 */
+        .drawer-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-height: 80vh;
+            background: linear-gradient(160deg, rgba(13, 30, 50, 0.96), rgba(20, 45, 70, 0.98));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 48px 48px 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 32px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            color: #c8ddec;
+            overflow: hidden;
+        }
+
+        .drawer-panel.show {
+            transform: translateY(0);
+        }
+
+        /* 抽屉头部 */
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .drawer-header h2 {
+            font-size: 22px;
+            font-weight: 400;
+            color: #b5d4ed;
+            letter-spacing: 4px;
+        }
+
+        .drawer-close {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #b5d4ed;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drawer-close:hover {
+            background: rgba(255, 150, 180, 0.2);
+            border-color: rgba(255, 150, 180, 0.4);
+            transform: rotate(90deg);
+        }
+
+        /* 抽屉表单 */
+        .drawer-form {
+            flex-shrink: 0;
+            margin-bottom: 18px;
+        }
+
+        .drawer-form input,
+        .drawer-form textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #c8ddec;
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 15px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .drawer-form input:focus,
+        .drawer-form textarea:focus {
+            border-color: rgba(255, 150, 180, 0.4);
+        }
+
+        .drawer-form textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .drawer-form .btn-submit {
+            background: rgba(255, 150, 180, 0.25);
+            border: none;
+            color: #fce4ec;
+            padding: 12px 32px;
+            border-radius: 30px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            letter-spacing: 2px;
+        }
+
+        .drawer-form .btn-submit:hover {
+            background: rgba(255, 150, 180, 0.45);
+            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
+        }
+
+        /* 抽屉内容列表 */
+        .drawer-list {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 4px;
+        }
+
+        .drawer-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .drawer-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
+
+        .drawer-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 150, 180, 0.2);
+            border-radius: 4px;
+        }
+
+        .drawer-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 2px solid rgba(255, 150, 180, 0.25);
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            border-radius: 0 16px 16px 0;
+        }
+
+        .drawer-item .item-title {
+            font-weight: 400;
+            color: #f0c8d5;
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .drawer-item .item-content {
+            color: #bdd6e8;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .drawer-item .item-time {
+            font-size: 12px;
+            color: rgba(180, 210, 235, 0.35);
+            margin-top: 8px;
+        }
+
+        .drawer-empty {
+            color: rgba(180, 210, 235, 0.4);
+            font-style: italic;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 15px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 600px) {
+            .container {
+                padding: 32px 18px 30px;
+                border-radius: 40px;
+            }
+            .main-title {
+                font-size: 40px;
+                letter-spacing: 5px;
+            }
+            .subtitle {
+                font-size: 18px;
+                letter-spacing: 4px;
+            }
+            .description {
+                font-size: 16px;
+                line-height: 2;
+            }
+            .bubble {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            .room-container {
+                padding: 24px 16px;
+            }
+            .room-title {
+                font-size: 19px;
+            }
+            .drawer-panel {
+                padding: 24px 18px 20px;
+                border-radius: 32px 32px 0 0;
+                max-height: 85vh;
+            }            .drawer-header h2 {                font-size: 19px;            }        }    </style></head><body>
     <div class="container">
         <!-- ===== 头部 ===== -->        <h1 class="main-title">Sea Of Me</h1>        <div class="title-ornament">✦ a quiet ocean within ✦</div>        <div class="subtitle">我的内心海洋</div>        <div class="description">            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />            我把自己的思绪、情绪和安静的瞬间，            <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />            如果你捡到了什么，那是海想让你看到的。        </div>
         <!-- ===== 五个气泡 ===== -->        <div class="nav-bubbles">            <div class="bubble active" data-room="bottle" data-tip="漂流瓶">🌊</div>            <div class="bubble" data-room="log" data-tip="日志">📜</div>            <div class="bubble" data-room="skill" data-tip="技能">⚓</div>            <div class="bubble" data-room="dream" data-tip="天马">✨</div>            <div class="bubble" data-room="about" data-tip="关于">🐚</div>        </div>
-        <!-- ===== 板块内容区（静态内容，保留不变） ===== -->        <div class="room-container" id="room-bottle">            <div class="room-title">🌊 漂流瓶海</div>            <div class="room-content">                <div class="bottle-item">我昨晚梦见自己是一行代码。</div>                <div class="bottle-item">学会拒绝的那天，下着雨。</div>            </div>        </div>
+        <!-- ===== 板块内容区 ===== -->        <div class="room-container" id="room-bottle">            <div class="room-title">🌊 漂流瓶海</div>            <div class="room-content">                <div class="bottle-item">我昨晚梦见自己是一行代码。</div>                <div class="bottle-item">学会拒绝的那天，下着雨。</div>            </div>        </div>
         <div class="room-container" id="room-log" style="display:none;">            <div class="room-title">📜 日志暗礁</div>            <div class="room-content">                <div class="log-entry">                    <h4>日志标题示例</h4>                    <p>在这里写你的经历或思考……</p>                </div>            </div>        </div>
         <div class="room-container" id="room-skill" style="display:none;">            <div class="room-title">⚓ 技能与印记</div>            <div class="room-content">                <div class="skill-tags">                    <span class="skill-tag">能在三秒内辨认云的类型</span>                    <span class="skill-tag">会做一种很酸的柠檬挞</span>                </div>            </div>        </div>
         <div class="room-container" id="room-dream" style="display:none;">            <div class="room-title">✨ 天马行空画廊</div>            <div class="room-content">                <div class="dream-card">                    平行宇宙里我是一个面包师，每天闻着黄油醒来。                </div>            </div>        </div>
         <div class="room-container" id="room-about" style="display:none;">            <div class="room-title">🐚 关于我这片海</div>            <div class="room-content about-text">                <p>我是这片海域的主人，一个喜欢收集思绪的人。</p>                <p>我相信每个念头都值得被温柔存放。</p>            </div>        </div>
         <!-- ===== 访客计数器 ===== -->        <div class="visitor-counter">            <span class="icon">🫧</span>            <span>已有</span>            <span id="busuanzi_value_site_uv">…</span>            <span>位访客漂流至此</span>        </div>
         <!-- ===== 底部波浪 ===== -->        <div class="wave-footer">            <span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span>        </div>    </div>
-    <!-- ============================================================    抽屉 + 遮罩层（独立于主容器之外）    ============================================================ -->
+    <!-- ============================================================    抽屉 + 遮罩层    ============================================================ -->
     <!-- 遮罩层 -->    <div class="drawer-overlay" id="drawerOverlay"></div>
     <!-- 抽屉 -->    <div class="drawer-panel" id="drawerPanel">        <div class="drawer-header">            <h2 id="drawerTitle">🌊 漂流瓶海</h2>            <button class="drawer-close" id="drawerClose">✕</button>        </div>
         <!-- 表单 -->        <div class="drawer-form">            <input type="text" id="inputTitle" placeholder="标题（选填）" maxlength="100" />            <textarea id="inputContent" placeholder="写下你想存放的内容..." required maxlength="2000"></textarea>            <button class="btn-submit" id="btnSubmit">发布</button>        </div>
@@ -227,7 +590,7 @@
     <script>        // ============================================================        // 1. Supabase 配置        // ============================================================        const supabaseUrl = 'https://fpdktuvjweybqqpptll.supabase.co';        const supabaseKey = 'sb_publishable_s-dzWfQk8aPfmCh2JoF1Xg_888sHSRP';        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
         // ============================================================        // 2. 分类映射        // ============================================================        const categoryMap = {            bottle: { name: '漂流瓶海', icon: '🌊' },            log: { name: '日志暗礁', icon: '📜' },            skill: { name: '技能与印记', icon: '⚓' },            dream: { name: '天马行空画廊', icon: '✨' },            about: { name: '关于我这片海', icon: '🐚' }        };
         let currentCategory = 'bottle';
-        // ============================================================        // 3. 切换分类（主页气泡切换）        // ============================================================        const bubbles = document.querySelectorAll('.bubble');        const rooms = {            bottle: document.getElementById('room-bottle'),            log: document.getElementById('room-log'),            skill: document.getElementById('room-skill'),            dream: document.getElementById('room-dream'),            about: document.getElementById('room-about')        };
+        // ============================================================        // 3. 切换分类（主页气泡切换 + 打开抽屉）        // ============================================================        const bubbles = document.querySelectorAll('.bubble');        const rooms = {            bottle: document.getElementById('room-bottle'),            log: document.getElementById('room-log'),            skill: document.getElementById('room-skill'),            dream: document.getElementById('room-dream'),            about: document.getElementById('room-about')        };
         bubbles.forEach(bubble => {            bubble.addEventListener('click', () => {                const roomKey = bubble.getAttribute('data-room');                // 切换显示区块                Object.values(rooms).forEach(room => room.style.display = 'none');                rooms[roomKey].style.display = 'block';                bubbles.forEach(b => b.classList.remove('active'));                bubble.classList.add('active');                // 打开抽屉                openDrawer(roomKey);            });        });
         // ============================================================        // 4. 打开/关闭抽屉        // ============================================================        const overlay = document.getElementById('drawerOverlay');        const panel = document.getElementById('drawerPanel');        const drawerTitle = document.getElementById('drawerTitle');        const drawerClose = document.getElementById('drawerClose');
         function openDrawer(category) {            currentCategory = category;            const info = categoryMap[category];            drawerTitle.textContent = info.icon + ' ' + info.name;            // 清空表单            document.getElementById('inputTitle').value = '';            document.getElementById('inputContent').value = '';            // 显示遮罩和抽屉            overlay.classList.add('show');            panel.classList.add('show');            document.body.style.overflow = 'hidden';            // 加载该分类的内容            loadContent(category);        }
