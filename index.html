@@ -1,487 +1,502 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sea Of Me · 赛博自己</title>
-    <meta name="description" content="存放我的想法、经验和天马行空的内在海域。" />
-    <style>
-        /* ===== 全局重置 ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sea Of Me · 赛博自己</title>
+    <meta name="description" content="存放我的想法、经验和天马行空的内在海域。" />
 
-        body {
-            font-family: "Georgia", "Times New Roman", "Songti SC", serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-            background: linear-gradient(145deg, #091a2e 0%, #132f4a 35%, #1a4a6e 70%, #0f2a40 100%);
-            background-attachment: fixed;
-        }
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        .container {
-            max-width: 780px;
-            width: 100%;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.045);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 56px 44px 48px;
-            border-radius: 64px;
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
+    <style>
+        /* ===== 全局重置 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .container::before {
-            content: "";
-            position: absolute;
-            top: -80px;
-            right: -80px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255, 150, 180, 0.20), transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
+        body {
+            font-family: "Georgia", "Times New Roman", "Songti SC", serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: linear-gradient(145deg, #091a2e 0%, #132f4a 35%, #1a4a6e 70%, #0f2a40 100%);
+            background-attachment: fixed;
+        }
 
-        .container::after {
-            content: "";
-            position: absolute;
-            bottom: -60px;
-            left: -60px;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255, 120, 160, 0.15), transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
+        .container {
+            max-width: 780px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.045);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 56px 44px 48px;
+            border-radius: 64px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-        .container>* {
-            position: relative;
-            z-index: 1;
-        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 150, 180, 0.20), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-        /* ===== 头部（不变） ===== */
-        .main-title {
-            font-size: 72px;
-            font-weight: 700;
-            letter-spacing: 10px;
-            color: #dcebf7;
-            text-shadow: 0 0 40px rgba(90, 180, 255, 0.20), 0 4px 20px rgba(0, 0, 0, 0.3);
-            margin-bottom: 4px;
-            line-height: 1.1;
-        }
+        .container::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 120, 160, 0.15), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-        .title-ornament {
-            font-size: 13px;
-            letter-spacing: 6px;
-            color: rgba(180, 210, 235, 0.35);
-            font-weight: 300;
-            font-style: italic;
-            margin-bottom: 18px;
-            font-family: "Georgia", serif;
-        }
+        .container>* {
+            position: relative;
+            z-index: 1;
+        }
 
-        .subtitle {
-            font-size: 24px;
-            font-weight: 300;
-            letter-spacing: 6px;
-            color: #2a6b9e;
-            animation: breatheBlue 2.8s ease-in-out infinite;
-            margin-bottom: 34px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
+        /* ===== 头部 ===== */
+        .main-title {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: 10px;
+            color: #dcebf7;
+            text-shadow: 0 0 40px rgba(90, 180, 255, 0.20), 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 4px;
+            line-height: 1.1;
+        }
 
-        @keyframes breatheBlue {
-            0% {
-                color: #1a4f7a;
-                text-shadow: 0 0 6px rgba(40, 120, 200, 0.15);
-            }
-            50% {
-                color: #3a8fc9;
-                text-shadow: 0 0 20px rgba(60, 150, 230, 0.35);
-            }
-            100% {
-                color: #1a4f7a;
-                text-shadow: 0 0 6px rgba(40, 120, 200, 0.15);
-            }
-        }
+        .title-ornament {
+            font-size: 13px;
+            letter-spacing: 6px;
+            color: rgba(180, 210, 235, 0.35);
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 18px;
+            font-family: "Georgia", serif;
+        }
 
-        .description {
-            font-size: 18px;
-            line-height: 2.1;
-            color: #c8ddec;
-            font-weight: 300;
-            text-align: left;
-            padding: 0 4px;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-        }
+        .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 6px;
+            color: #2a6b9e;
+            animation: breatheBlue 2.8s ease-in-out infinite;
+            margin-bottom: 34px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
 
-        .description .highlight {
-            color: #f5b8c9;
-            font-weight: 400;
-            font-style: italic;
-        }
+        @keyframes breatheBlue {
+            0% {
+                color: #1a4f7a;
+                text-shadow: 0 0 6px rgba(40, 120, 200, 0.15);
+            }
+            50% {
+                color: #3a8fc9;
+                text-shadow: 0 0 20px rgba(60, 150, 230, 0.35);
+            }
+            100% {
+                color: #1a4f7a;
+                text-shadow: 0 0 6px rgba(40, 120, 200, 0.15);
+            }
+        }
 
-        .drop-cap {
-            font-size: 28px;
-            font-weight: 400;
-            color: #e8c4d0;
-        }
+        .description {
+            font-size: 18px;
+            line-height: 2.1;
+            color: #c8ddec;
+            font-weight: 300;
+            text-align: left;
+            padding: 0 4px;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
 
-        /* ===== 导航气泡 ===== */
-        .nav-bubbles {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
+        .description .highlight {
+            color: #f5b8c9;
+            font-weight: 400;
+            font-style: italic;
+        }
 
-        .bubble {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #b5d4ed;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.35s ease;
-            backdrop-filter: blur(8px);
-            position: relative;
-            user-select: none;
-        }
+        .drop-cap {
+            font-size: 28px;
+            font-weight: 400;
+            color: #e8c4d0;
+        }
 
-        .bubble:hover {
-            background: rgba(255, 180, 200, 0.15);
-            border-color: rgba(255, 180, 200, 0.35);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);
-        }
+        /* ===== 导航气泡 ===== */
+        .nav-bubbles {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
 
-        .bubble.active {
-            background: rgba(255, 150, 180, 0.25);
-            border-color: rgba(255, 150, 180, 0.55);
-            color: #fce4ec;
-            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
-            transform: translateY(-4px);
-        }
+        .bubble {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #b5d4ed;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(8px);
+            position: relative;
+            user-select: none;
+        }
 
-        .bubble::after {
-            content: attr(data-tip);
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
-            color: rgba(180, 210, 235, 0.6);
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
+        .bubble:hover {
+            background: rgba(255, 180, 200, 0.15);
+            border-color: rgba(255, 180, 200, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 150, 180, 0.25);
+        }
 
-        .bubble:hover::after {
-            opacity: 1;
-        }
+        .bubble.active {
+            background: rgba(255, 150, 180, 0.25);
+            border-color: rgba(255, 150, 180, 0.55);
+            color: #fce4ec;
+            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
+            transform: translateY(-4px);
+        }
 
-        /* ===== 板块内容容器 ===== */
-        .room-container {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 40px;
-            padding: 36px 28px 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            min-height: 220px;
-            transition: background 0.3s;
-            margin-bottom: 20px;
-            text-align: left;
-            color: #c8ddec;
-        }
+        .bubble::after {
+            content: attr(data-tip);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(180, 210, 235, 0.6);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
 
-        .room-title {
-            font-size: 22px;
-            letter-spacing: 4px;
-            color: #b5d4ed;
-            margin-bottom: 20px;
-            font-weight: 400;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-            padding-bottom: 12px;
-        }
+        .bubble:hover::after {
+            opacity: 1;
+        }
 
-        .room-content {
-            font-size: 16px;
-            line-height: 2;
-            color: #bdd6e8;
-            font-weight: 300;
-        }
+        /* ===== 板块内容容器 ===== */
+        .room-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 40px;
+            padding: 36px 28px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 220px;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #c8ddec;
+        }
 
-        .bottle-item {
-            background: rgba(255, 255, 255, 0.04);
-            border-left: 2px solid rgba(255, 150, 180, 0.35);
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            border-radius: 0 12px 12px 0;
-            font-style: italic;
-        }
+        .room-title {
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: #b5d4ed;
+            margin-bottom: 20px;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding-bottom: 12px;
+        }
 
-        .log-entry {
-            margin-bottom: 20px;
-        }
-        .log-entry h4 {
-            font-weight: 400;
-            color: #f0c8d5;
-            margin-bottom: 6px;
-            font-size: 18px;
-        }
-        .log-entry p {
-            color: #bdd6e8;
-        }
+        .room-content {
+            font-size: 16px;
+            line-height: 2;
+            color: #bdd6e8;
+            font-weight: 300;
+        }
 
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .skill-tag {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #d5e5f2;
-        }
+        .bottle-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 2px solid rgba(255, 150, 180, 0.35);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+        }
 
-        .dream-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 16px;
-            border-radius: 18px;
-            margin-bottom: 12px;
-            border: 1px dashed rgba(255, 200, 220, 0.2);
-        }
+        .log-entry {
+            margin-bottom: 20px;
+        }
+        .log-entry h4 {
+            font-weight: 400;
+            color: #f0c8d5;
+            margin-bottom: 6px;
+            font-size: 18px;
+        }
+        .log-entry p {
+            color: #bdd6e8;
+        }
 
-        .about-text p {
-            margin-bottom: 14px;
-        }
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #d5e5f2;
+        }
 
-        /* ===== 访客计数器样式 ===== */
-        .visitor-counter {
-            font-size: 14px;
-            letter-spacing: 2px;
-            color: rgba(180, 210, 235, 0.5);
-            margin-bottom: 16px;
-            font-style: italic;
-            font-weight: 300;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
+        .dream-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            border: 1px dashed rgba(255, 200, 220, 0.2);
+        }
 
-        .visitor-counter .icon {
-            font-size: 16px;
-        }
+        .about-text p {
+            margin-bottom: 14px;
+        }
 
-        .visitor-counter #busuanzi_value_site_uv {
-            color: #f5b8c9;
-            font-weight: 400;
-        }
+        /* ===== 全屏覆盖层 ===== */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
 
-        /* ===== 底部波浪不变 ===== */
-        .wave-footer {
-            margin-top: 0;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            font-size: 28px;
-            letter-spacing: 12px;
-            opacity: 0.30;
-            color: rgba(180, 210, 235, 0.25);
-            font-weight: 100;
-            user-select: none;
-        }
+        .fullscreen-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
 
-        .wave-footer span {
-            display: inline-block;
-            animation: waveFloat 3s ease-in-out infinite;
-        }
-        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }
-        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }
-        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }
-        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }
-        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }
-        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }
+        .fullscreen-panel {
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            background: linear-gradient(160deg, rgba(15, 35, 55, 0.98), rgba(25, 55, 80, 0.98));
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+            padding: 36px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
 
-        @keyframes waveFloat {
-            0%, 100% {
-                transform: translateY(0px);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translateY(-4px);
-                opacity: 0.8;
-            }
-        }
+        .fullscreen-overlay.show .fullscreen-panel {
+            transform: scale(1) translateY(0);
+        }
 
-        /* ===== 响应式 ===== */
-        @media (max-width: 600px) {
-            .container {
-                padding: 32px 18px 30px;
-                border-radius: 40px;
-            }
-            .main-title {
-                font-size: 40px;
-                letter-spacing: 5px;
-            }
-            .subtitle {
-                font-size: 18px;
-                letter-spacing: 4px;
-            }
-            .description {
-                font-size: 16px;
-                line-height: 2;
-            }
-            .bubble {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
-            }
-            .room-container {
-                padding: 24px 16px;
-            }
-            .room-title {
-                font-size: 19px;
-            }
-        }
-    </style>
-</head>
-<body>
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
 
-    <div class="container">
+        .panel-header h2 {
+            font-size: 24px;
+            font-weight: 400;
+            color: #b5d4ed;
+            letter-spacing: 4px;
+        }
 
-        <!-- 头部（不变） -->
-        <h1 class="main-title">Sea Of Me</h1>
-        <div class="title-ornament">✦ a quiet ocean within ✦</div>
-        <div class="subtitle">我的内心海洋</div>
-        <div class="description">
-            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />
-            我把自己的思绪、情绪和安静的瞬间，
-            <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />
-            如果你捡到了什么，那是海想让你看到的。
-        </div>
+        .panel-close {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #b5d4ed;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        <!-- 五个气泡导航 -->
-        <div class="nav-bubbles">
-            <div class="bubble active" data-room="bottle" data-tip="漂流瓶">🌊</div>
-            <div class="bubble" data-room="log" data-tip="日志">📜</div>
-            <div class="bubble" data-room="skill" data-tip="技能">⚓</div>
-            <div class="bubble" data-room="dream" data-tip="天马">✨</div>
-            <div class="bubble" data-room="about" data-tip="关于">🐚</div>
-        </div>
+        .panel-close:hover {
+            background: rgba(255, 150, 180, 0.2);
+            border-color: rgba(255, 150, 180, 0.4);
+            transform: rotate(90deg);
+        }
 
-        <!-- 板块内容区 -->
-        <div class="room-container" id="room-bottle">
-            <div class="room-title">🌊 漂流瓶海</div>
-            <div class="room-content">
-                <!-- ===== 在这里添加你的漂流瓶内容 ===== -->
-                <div class="bottle-item">我昨晚梦见自己是一行代码。</div>
-                <div class="bottle-item">学会拒绝的那天，下着雨。</div>
-                <!-- 继续添加更多瓶子 -->
-            </div>
-        </div>
+        /* 表单样式 */
+        .upload-form {
+            flex-shrink: 0;
+            margin-bottom: 20px;
+        }
 
-        <div class="room-container" id="room-log" style="display:none;">
-            <div class="room-title">📜 日志暗礁</div>
-            <div class="room-content">
-                <!-- ===== 在这里添加你的日志 ===== -->
-                <div class="log-entry">
-                    <h4>日志标题示例</h4>
-                    <p>在这里写你的经历或思考……</p >
-                </div>
-            </div>
-        </div>
+        .upload-form input,
+        .upload-form textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #c8ddec;
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 16px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border 0.3s;
+        }
 
-        <div class="room-container" id="room-skill" style="display:none;">
-            <div class="room-title">⚓ 技能与印记</div>
-            <div class="room-content">
-                <!-- ===== 在这里添加你的技能标签 ===== -->
-                <div class="skill-tags">
-                    <span class="skill-tag">能在三秒内辨认云的类型</span>
-                    <span class="skill-tag">会做一种很酸的柠檬挞</span>
-                </div>
-            </div>
-        </div>
+        .upload-form input:focus,
+        .upload-form textarea:focus {
+            border-color: rgba(255, 150, 180, 0.4);
+        }
 
-        <div class="room-container" id="room-dream" style="display:none;">
-            <div class="room-title">✨ 天马行空画廊</div>
-            <div class="room-content">
-                <!-- ===== 在这里添加你的天马行空 ===== -->
-                <div class="dream-card">
-                    平行宇宙里我是一个面包师，每天闻着黄油醒来。
-                </div>
-            </div>
-        </div>
+        .upload-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
 
-        <div class="room-container" id="room-about" style="display:none;">
-            <div class="room-title">🐚 关于我这片海</div>
-            <div class="room-content about-text">
-                <!-- ===== 在这里写自我介绍或价值观 ===== -->
-                <p>我是这片海域的主人，一个喜欢收集思绪的人。</p >
-                <p>我相信每个念头都值得被温柔存放。</p >
-            </div>
-        </div>
+        .upload-form .btn-submit {
+            background: rgba(255, 150, 180, 0.25);
+            border: none;
+            color: #fce4ec;
+            padding: 12px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            letter-spacing: 2px;
+        }
 
-        <!-- ===== 访客计数器 ===== -->
-        <div class="visitor-counter">
-            <span class="icon">🫧</span>
-            <span>已有</span>
-            <span id="busuanzi_value_site_uv">…</span>
-            <span>位访客漂流至此</span>
-        </div>
+        .upload-form .btn-submit:hover {
+            background: rgba(255, 150, 180, 0.45);
+            box-shadow: 0 0 28px rgba(255, 150, 180, 0.3);
+        }
 
-        <!-- 底部波浪 -->
-        <div class="wave-footer">
-            <span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span>
-        </div>
-    </div>
+        /* 内容列表 */
+        .panel-content-list {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 4px;
+        }
 
-    <!-- 板块切换脚本 -->
-    <script>
-        const bubbles = document.querySelectorAll('.bubble');
-        const rooms = {
-            bottle: document.getElementById('room-bottle'),            瓶子: 文档.getElementById('房间-瓶子'),
-            log: document.getElementById('room-log'),            日志: 文档.getElementById('room-log''房间日志'),
-            skill技能: document文档.getElementById('room-skill''房间技能'),            技能: 文档.getElementById('room-skill'),
-            dream: document.getElementById('room-dream'),            梦: 文档.getElementById('room-dream''房间之梦'),
-            about关于: document文档.getElementById('room-about''房间-关于')            关于: 文档.getElementById('room-about')
-        };
+        .panel-content-list::-webkit-scrollbar {
+            width: 4px;
+        }
 
-        bubbles.forEach(bubble => {        气泡.forEach(气泡 => {
-            bubble.addEventListener('click''点击', () => {            气泡.addEventListener('click', () => {
-                const roomKey = bubble.getAttribute('data-room');
-                Object.values(rooms).forEach(room => room.style.display = 'none');                对象.值(房间).遍历(房间 => 房间.样式.显示 = 'none');
-                rooms[roomKey].style.display = 'block';                房间[房间键].样式.显示 = '块级元素';
-                bubbles.forEach(b => b.classList.remove('active'));                气泡.forEach(气泡 => 气泡.classList.remove('active'));
-                bubble.classList.add('active');                气泡.classList.添加('active');
-            });
-        });
-    </script>
+        .panel-content-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
 
-    <!-- 不蒜子计数器脚本 -->
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-</body>
-</html>
+        .panel-content-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 150, 180, 0.2);
+            border-radius: 4px;
+        }
+
+        .panel-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 2px solid rgba(255, 150, 180, 0.25);
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            border-radius: 0 16px 16px 0;
+        }
+
+        .panel-item .item-title {
+            font-weight: 400;
+            color: #f0c8d5;
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .panel-item .item-content {            color: #bdd6e8;            font-size: 15px;            line-height: 1.7;        }
+        .panel-item .item-time {            font-size: 12px;            color: rgba(180, 210, 235, 0.35);            margin-top: 8px;        }
+        .panel-empty {            color: rgba(180, 210, 235, 0.4);            font-style: italic;            text-align: center;            padding: 30px 0;            font-size: 15px;        }
+        /* ===== 访客计数器 ===== */        .visitor-counter {            font-size: 14px;            letter-spacing: 2px;            color: rgba(180, 210, 235, 0.5);            margin-bottom: 16px;            font-style: italic;            font-weight: 300;            display: flex;            align-items: center;            justify-content: center;            gap: 6px;        }
+        .visitor-counter .icon {            font-size: 16px;        }
+        .visitor-counter #busuanzi_value_site_uv {            color: #f5b8c9;            font-weight: 400;        }
+        /* ===== 底部波浪 ===== */        .wave-footer {            margin-top: 0;            padding-top: 24px;            border-top: 1px solid rgba(255, 255, 255, 0.04);            font-size: 28px;            letter-spacing: 12px;            opacity: 0.30;            color: rgba(180, 210, 235, 0.25);            font-weight: 100;            user-select: none;        }
+        .wave-footer span {            display: inline-block;            animation: waveFloat 3s ease-in-out infinite;        }        .wave-footer span:nth-child(2) { animation-delay: 0.4s; }        .wave-footer span:nth-child(3) { animation-delay: 0.8s; }        .wave-footer span:nth-child(4) { animation-delay: 1.2s; }        .wave-footer span:nth-child(5) { animation-delay: 1.6s; }        .wave-footer span:nth-child(6) { animation-delay: 2.0s; }        .wave-footer span:nth-child(7) { animation-delay: 2.4s; }
+        @keyframes waveFloat {            0%, 100% {                transform: translateY(0px);                opacity: 0.3;            }            50% {                transform: translateY(-4px);                opacity: 0.8;            }        }
+        /* ===== 响应式 ===== */        @media (max-width: 600px) {            .container {                padding: 32px 18px 30px;                border-radius: 40px;            }            .main-title {                font-size: 40px;                letter-spacing: 5px;            }            .subtitle {                font-size: 18px;                letter-spacing: 4px;            }            .description {                font-size: 16px;                line-height: 2;            }            .bubble {                width: 44px;                height: 44px;                font-size: 20px;            }            .room-container {                padding: 24px 16px;            }            .room-title {                font-size: 19px;            }            .fullscreen-panel {                padding: 28px 18px 24px;                border-radius: 32px;                max-height: 94vh;            }            .panel-header h2 {                font-size: 20px;            }        }    </style></head><body>
+    <div class="container">
+        <!-- ===== 头部 ===== -->        <h1 class="main-title">Sea Of Me</h1>        <div class="title-ornament">✦ a quiet ocean within ✦</div>        <div class="subtitle">我的内心海洋</div>        <div class="description">            <span class="drop-cap">欢</span>迎来到我的内在海域。这里没有对错，只有存在。<br />            我把自己的思绪、情绪和安静的瞬间，            <span class="highlight">像漂流瓶一样放在这片海里</span>。<br />            如果你捡到了什么，那是海想让你看到的。        </div>
+        <!-- ===== 五个气泡 ===== -->        <div class="nav-bubbles">            <div class="bubble active" data-room="bottle" data-tip="漂流瓶">🌊</div>            <div class="bubble" data-room="log" data-tip="日志">📜</div>            <div class="bubble" data-room="skill" data-tip="技能">⚓</div>            <div class="bubble" data-room="dream" data-tip="天马">✨</div>            <div class="bubble" data-room="about" data-tip="关于">🐚</div>        </div>
+        <!-- ===== 板块内容区（保留原有静态内容） ===== -->        <div class="room-container" id="room-bottle">            <div class="room-title">🌊 漂流瓶海</div>            <div class="room-content">                <div class="bottle-item">我昨晚梦见自己是一行代码。</div>                <div class="bottle-item">学会拒绝的那天，下着雨。</div>            </div>        </div>
+        <div class="room-container" id="room-log" style="display:none;">            <div class="room-title">📜 日志暗礁</div>            <div class="room-content">                <div class="log-entry">                    <h4>日志标题示例</h4>                    <p>在这里写你的经历或思考……</p>                </div>            </div>        </div>
+        <div class="room-container" id="room-skill" style="display:none;">            <div class="room-title">⚓ 技能与印记</div>            <div class="room-content">                <div class="skill-tags">                    <span class="skill-tag">能在三秒内辨认云的类型</span>                    <span class="skill-tag">会做一种很酸的柠檬挞</span>                </div>            </div>        </div>
+        <div class="room-container" id="room-dream" style="display:none;">            <div class="room-title">✨ 天马行空画廊</div>            <div class="room-content">                <div class="dream-card">                    平行宇宙里我是一个面包师，每天闻着黄油醒来。                </div>            </div>        </div>
+        <div class="room-container" id="room-about" style="display:none;">            <div class="room-title">🐚 关于我这片海</div>            <div class="room-content about-text">                <p>我是这片海域的主人，一个喜欢收集思绪的人。</p>                <p>我相信每个念头都值得被温柔存放。</p>            </div>        </div>
+        <!-- ===== 访客计数器 ===== -->        <div class="visitor-counter">            <span class="icon">🫧</span>            <span>已有</span>            <span id="busuanzi_value_site_uv">…</span>            <span>位访客漂流至此</span>        </div>
+        <!-- ===== 底部波浪 ===== -->        <div class="wave-footer">            <span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span><span>~</span>        </div>    </div>
+    <!-- ===== 全屏覆盖层 ===== -->    <div class="fullscreen-overlay" id="fullscreenOverlay">        <div class="fullscreen-panel">            <div class="panel-header">                <h2 id="panelTitle">🌊 漂流瓶海</h2>                <button class="panel-close" id="panelClose">✕</button>            </div>
+            <!-- 上传表单 -->            <div class="upload-form">                <input type="text" id="inputTitle" placeholder="标题（选填）" maxlength="100" />                <textarea id="inputContent" placeholder="写下你想存放的内容..." required maxlength="2000"></textarea>                <button class="btn-submit" id="btnSubmit">发布</button>            </div>
+            <!-- 内容列表 -->            <div class="panel-content-list" id="panelContentList">                <div class="panel-empty">✨ 这片海域还没有内容，发布第一条吧</div>            </div>        </div>    </div>
+    <script>        // ============================================================        // 1. Supabase 配置        // ============================================================        const supabaseUrl = 'https://fpdktuvjweybqqpptll.supabase.co';        const supabaseKey = 'sb_publishable_s-dzWfQk8aPfmCh2JoF1Xg_888sHSRP';        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // ============================================================        // 2. 分类映射        // ============================================================        const categoryMap = {            bottle: { name: '漂流瓶海', icon: '🌊' },            log: { name: '日志暗礁', icon: '📜' },            skill: { name: '技能与印记', icon: '⚓' },            dream: { name: '天马行空画廊', icon: '✨' },            about: { name: '关于我这片海', icon: '🐚' }        };
+        let currentCategory = 'bottle';
+        // ============================================================        // 3. 切换分类（主页气泡切换）        // ============================================================        const bubbles = document.querySelectorAll('.bubble');        const rooms = {            bottle: document.getElementById('room-bottle'),            log: document.getElementById('room-log'),            skill: document.getElementById('room-skill'),            dream: document.getElementById('room-dream'),            about: document.getElementById('room-about')        };
+        bubbles.forEach(bubble => {            bubble.addEventListener('click', () => {                const roomKey = bubble.getAttribute('data-room');                // 切换显示区块                Object.values(rooms).forEach(room => room.style.display = 'none');                rooms[roomKey].style.display = 'block';                bubbles.forEach(b => b.classList.remove('active'));                bubble.classList.add('active');                // 打开全屏覆盖层                openPanel(roomKey);            });        });
+        // ============================================================        // 4. 打开/关闭全屏覆盖层        // ============================================================        const overlay = document.getElementById('fullscreenOverlay');        const panelTitle = document.getElementById('panelTitle');        const panelClose = document.getElementById('panelClose');
+        function openPanel(category) {            currentCategory = category;            const info = categoryMap[category];            panelTitle.textContent = info.icon + ' ' + info.name;            overlay.classList.add('show');            document.body.style.overflow = 'hidden';            // 清空表单            document.getElementById('inputTitle').value = '';            document.getElementById('inputContent').value = '';            // 加载该分类的内容            loadContent(category);        }
+        function closePanel() {            overlay.classList.remove('show');            document.body.style.overflow = '';        }
+        panelClose.addEventListener('click', closePanel);        overlay.addEventListener('click', (e) => {            if (e.target === overlay) closePanel();        });
+        // ============================================================        // 5. 加载内容（从 Supabase）        // ============================================================        async function loadContent(category) {            const list = document.getElementById('panelContentList');            list.innerHTML = '<div style="color:rgba(180,210,235,0.3);text-align:center;padding:20px;">加载中...</div>';
+            const { data, error } = await supabase                .from('messages')                .select('*')                .eq('category', category)                .order('created_at', { ascending: false });
+            if (error) {                console.error('加载失败:', error);                list.innerHTML = '<div class="panel-empty">⚠️ 加载失败，请稍后重试</div>';                return;            }
+            if (!data || data.length === 0) {                list.innerHTML = '<div class="panel-empty">✨ 这片海域还没有内容，发布第一条吧</div>';                return;            }
+            let html = '';            data.forEach(item => {                const title = item.title || '无标题';                const content = item.content || '';                const time = item.created_at ? new Date(item.created_at).toLocaleString('zh-CN', {                    year: 'numeric',                    month: '2-digit',                    day: '2-digit',                    hour: '2-digit',                    minute: '2-digit'                }) : '';                html += `                    <div class="panel-item">                        <div class="item-title">${escapeHtml(title)}</div>                        <div class="item-content">${escapeHtml(content)}</div>                        ${time ? `<div class="item-time">${time}</div>` : ''}                    </div>                `;            });            list.innerHTML = html;        }
+        // ============================================================        // 6. 发布内容        // ============================================================        document.getElementById('btnSubmit').addEventListener('click', async () => {            const title = document.getElementById('inputTitle').value.trim() || null;            const content = document.getElementById('inputContent').value.trim();
+            if (!content) {                alert('内容不能为空');                return;            }
+            const btn = document.getElementById('btnSubmit');            btn.textContent = '发布中...';            btn.disabled = true;
+            const { error } = await supabase                .from('messages')                .insert([{                    category: currentCategory,                    title: title,                    content: content                }]);
+            btn.textContent = '发布';            btn.disabled = false;
+            if (error) {                console.error('发布失败:', error);                alert('发布失败，请稍后重试');                return;            }
+            // 清空表单            document.getElementById('inputTitle').value = '';            document.getElementById('inputContent').value = '';            // 重新加载列表            loadContent(currentCategory);        });
+        // ============================================================        // 7. 工具函数        // ============================================================        function escapeHtml(text) {            if (!text) return '';            const div = document.createElement('div');            div.textContent = text;            return div.innerHTML;        }
+        // ============================================================        // 8. 点击气泡打开全屏覆盖层（已经在上面实现了）        //    注意：点击气泡时会同时切换底部内容 + 打开覆盖层        // ============================================================
+        console.log('🌊 Sea Of Me 已加载，Supabase 连接就绪');    </script>
+    <!-- 不蒜子计数器 -->    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></body></html>
